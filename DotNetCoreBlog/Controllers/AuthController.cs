@@ -29,7 +29,7 @@ namespace DotNetCoreBlog.Controllers
         {
             var result = await _signInManager.PasswordSignInAsync(loginVm.UserName, loginVm.Password, false, false);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Panel");
         }
 
         [HttpGet]
