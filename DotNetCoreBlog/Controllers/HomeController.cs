@@ -1,4 +1,5 @@
-﻿using DotNetCoreBlog.Models;
+﻿using DotNetCoreBlog.Data;
+using DotNetCoreBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,13 @@ namespace DotNetCoreBlog.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _db;
+
+        public HomeController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -26,8 +34,11 @@ namespace DotNetCoreBlog.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Post post)
+        public async Task<IActionResult> Edit(Post post)
         {
+            _db.Posts.Add(post);
+            await _db.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
     }
