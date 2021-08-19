@@ -1,4 +1,5 @@
 ﻿using DotNetCoreBlog.Data;
+using DotNetCoreBlog.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +27,8 @@ namespace DotNetCoreBlog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(_config["DefaultConnection"]));
+
+            services.AddTransient<IRepository, Repository>();
 
             services.AddMvc();
         }

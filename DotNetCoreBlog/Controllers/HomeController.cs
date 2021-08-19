@@ -1,4 +1,5 @@
 ﻿using DotNetCoreBlog.Data;
+using DotNetCoreBlog.Data.Repository;
 using DotNetCoreBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,11 +12,11 @@ namespace DotNetCoreBlog.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IRepository _repo;
 
-        public HomeController(ApplicationDbContext db)
+        public HomeController(IRepository repo)
         {
-            _db = db;
+            _repo = repo;
         }
 
         public IActionResult Index()
@@ -36,10 +37,17 @@ namespace DotNetCoreBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Post post)
         {
-            _db.Posts.Add(post);
-            await _db.SaveChangesAsync();
+            if(post == null)
+            {
+                return View(post);
+            }
 
-            return RedirectToAction("Index");
+            _repo.AddPost(post);
+
+            if (await _repo.SaveChangesAsync())
+                return RedirectToAction("Index");
+            else
+                return View(post);
         }
     }
 }
