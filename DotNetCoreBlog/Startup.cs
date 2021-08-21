@@ -1,4 +1,5 @@
 ﻿using DotNetCoreBlog.Data;
+using DotNetCoreBlog.Data.FileManager;
 using DotNetCoreBlog.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,7 @@ namespace DotNetCoreBlog
             });
 
             services.AddTransient<IRepository, Repository>();
+            services.AddTransient<IFileManager, FileManager>();
 
             services.AddMvc();
         }
@@ -50,6 +52,8 @@ namespace DotNetCoreBlog
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

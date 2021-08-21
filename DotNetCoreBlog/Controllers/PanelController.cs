@@ -1,5 +1,7 @@
-﻿using DotNetCoreBlog.Data.Repository;
+﻿using DotNetCoreBlog.Data.FileManager;
+using DotNetCoreBlog.Data.Repository;
 using DotNetCoreBlog.Models;
+using DotNetCoreBlog.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,10 +16,12 @@ namespace DotNetCoreBlog.Controllers
     public class PanelController : Controller
     {
         private readonly IRepository _repo;
+        private IFileManager _fileManager;
 
-        public PanelController(IRepository repo)
+        public PanelController(IRepository repo, IFileManager fileManager)
         {
             _repo = repo;
+            _fileManager = fileManager;
         }
 
         public IActionResult Index()
@@ -36,19 +40,32 @@ namespace DotNetCoreBlog.Controllers
         {
             if (id == null)
             {
-                return View(new Post());
+                return View(new PostViewModel());
             }
             else
             {
                 var post = _repo.GetPost((int)id);
-                return View(post);
+                return View(new PostViewModel
+                {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Body = post.Body
+                });
             }
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Post post)
+        public async Task<IActionResult> Edit(PostViewModel postVM)
         {
+            var post = new Post
+            {
+                Id = postVM.Id,
+                Title = postVM.Title,
+                Body = postVM.Body,
+                Image = await _fileManager.SaveImage(postVM.Image)
+            };
+
             if (post.Id > 0)
                 _repo.UpdatePost(post);
             else
