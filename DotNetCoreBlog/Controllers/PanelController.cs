@@ -50,7 +50,10 @@ namespace DotNetCoreBlog.Controllers
                     Id = post.Id,
                     Title = post.Title,
                     Body = post.Body,
-                    CurrentImage = post.Image
+                    CurrentImage = post.Image,
+                    Description = post.Description,
+                    Tags = post.Tags,
+                    Category = post.Category
                 });
             }
 
@@ -63,7 +66,10 @@ namespace DotNetCoreBlog.Controllers
             {
                 Id = postVM.Id,
                 Title = postVM.Title,
-                Body = postVM.Body
+                Body = postVM.Body,
+                Description = postVM.Description,
+                Tags = postVM.Tags,
+                Category = postVM.Category
             };
 
             if (postVM.Image == null)

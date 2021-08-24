@@ -52,5 +52,17 @@ namespace DotNetCoreBlog.Data.Repository
             }
             return false;
         }
+
+        public List<Post> GetAllPosts(string category)
+        {
+            return _db.Posts
+                .Where(p => p.Category.ToLower().Equals(category.ToLower()))
+                .ToList();
+
+            //Functional Programming
+            //Func<Post, bool> InCategory = (post) => { return post.Category.ToLower().Equals(category.ToLower()); };
+
+            //return _db.Posts.Where(post => InCategory(post)).ToList();
+        }
     }
 }
