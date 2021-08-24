@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\content\blog\" />
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>
